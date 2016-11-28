@@ -1,0 +1,117 @@
+# -----------------------------------------------------------------------------------------------------------
+#                                              W3AF AUDIT SCRIPT FOR WEB APPLICATION
+# -----------------------------------------------------------------------------------------------------------
+#
+# Based on https://www.owasp.org/index.php/Automated_Audit_using_W3AF
+#
+#Configure HTTP settings
+http-settings
+
+#Use random User-Agent header
+set rand_user_agent True
+
+#HTTP connection timeout
+set timeout 30
+back
+
+#Configure scanner global behaviors
+misc-settings
+
+#Full path of Metasploit framework binary directory
+set msf_location /usr/bin/
+
+#Maximum crawl time (minutes)
+set max_discovery_time 20
+
+#Indicates if w3af plugins will use cookies as a fuzzable parameter
+set fuzz_cookies True
+
+#Indicates if w3af plugins will send payloads in the content of multipart/post form files.
+set fuzz_form_files True
+
+#Indicates if w3af plugins will send fuzzed URL parts in order to find vulnerabilities
+set fuzz_url_parts True
+
+#Indicates if w3af plugins will send fuzzed file names in order to find vulnerabilities
+set fuzz_url_filenames True
+back
+
+#Configure plugins
+plugins
+
+#Configure entry point (CRAWLING) scanner
+#Crawl the web application.
+crawl web_spider
+crawl config web_spider
+
+#When crawling only follow links to paths inside the one given as target.
+set only_forward False
+
+#When crawling, DO NOT follow links that match this regular expression. Please note that ignore_regex has precedence over follow_regex.
+set ignore_regex (?i)(logout|disconnect|signout|exit)+
+back
+
+#Search Bing to get a list of new URLs
+crawl bing_spider
+
+#Search Google for vulnerabilities in the target site.
+crawl ghdb
+
+#Search google using google API to get new URLs
+crawl google_spider
+
+#Try to find backups, and other related files.
+crawl url_fuzzer
+
+#Configure vulnerability scanners
+##Specify list of AUDIT plugins type to use
+audit blind_sqli, buffer_overflow, cors_origin, csrf, eval, file_upload, ldapi, lfi, os_commanding, phishing_vector, redos, response_splitting, sqli, xpath, xss, xst
+
+##Customize behavior of each audit plugin when needed
+audit config file_upload
+#Extensions that w3af will try to upload through the form.
+set extensions jsp,php,php2,php3,php4,php5,asp,aspx,pl,cfm,rb,py,sh,ksh,csh,bat,ps,exe,txt,bak
+back
+
+##Specify list of GREP plugins type to use (grep plugin is a type of plugin that can find also vulnerabilities or informations disclosure)
+grep analyze_cookies, click_jacking, code_disclosure, cross_domain_js, csp, directory_indexing, dom_xss, error_500, error_pages, html_comments, objects, path_disclosure, private_ip, strange_headers, strange_http_codes, strange_parameters, strange_reason, url_session, xss_protection_header
+
+##Specify list of INFRASTRUCTURE plugins type to use (infrastructure plugin is a type of plugin that can find informations disclosure)
+infrastructure server_header, server_status, domain_dot, dot_net_errors, ms15_034, find_jboss, finger_google, finger_bing
+
+#Configure reporting in order to generate an HTML report
+output console, html_file
+output config html_file
+
+#File name where this plugin will write to
+set output_file /tmp/WW3afReport.html
+
+#True if debug information will be appended to the report.
+set verbose False
+back
+
+#Configure Console
+output config console
+
+#Enables verbose output for the console 
+set verbose False
+back
+back
+
+############################################################
+#
+#		You need configure itens below
+#
+############################################################
+#Set target informations, do a cleanup and run the scan
+target
+set target YOUR_TARGET:MAYBE_PORT
+
+#Target operating system (unknown/unix/windows)
+set target_os OS
+
+#Target programming framework (unknown/php/asp/asp.net/java/jsp/cfm/ruby/perl)
+set target_framework FRAMEWORK 
+back
+cleanup
+start
