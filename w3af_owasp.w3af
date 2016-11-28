@@ -4,6 +4,11 @@
 #
 # Based on https://www.owasp.org/index.php/Automated_Audit_using_W3AF
 #
+# This page have to objective to show a W3AF sample script to automate audit of a web application.
+# W3AF is a free and open source Web Application Attack and Audit Framework (W3AF homepage).
+# This script do not replace a manual audit but can be useful to perform a first validation.
+#
+
 #Configure HTTP settings
 http-settings
 
