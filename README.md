@@ -7,6 +7,7 @@ Scripts to automate the use of w3af
 - set target_os OS
 - set target_framework FRAMEWORK
 
+---------------------------------------------------------------
 
 Script per automatizzare l'uso di w3af
 
