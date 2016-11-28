@@ -9,6 +9,8 @@ Scripts to automate the use of w3af
 
 
 Script per automatizzare l'uso di w3af
+
+
 **È necessario configurare gli elementi di seguito**
 
 - set target YOUR_TARGET:MAYBE_PORT
